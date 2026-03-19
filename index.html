@@ -1,0 +1,1147 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Бриф на разработку бота или сайта</title>
+  <meta
+    name="description"
+    content="Одностраничный опросник для сбора брифа на разработку сайта, бота или веб-сервиса с отправкой ответов в Telegram."
+  >
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23111111'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23e8ff52'/%3E%3C/svg%3E"
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  >
+  <style>
+    :root {
+      --bg: #f2eadf;
+      --paper: rgba(255, 251, 244, 0.94);
+      --paper-strong: #fffdf9;
+      --ink: #111111;
+      --muted: #5f564b;
+      --line: rgba(17, 17, 17, 0.14);
+      --line-strong: rgba(17, 17, 17, 0.28);
+      --accent: #e8ff52;
+      --accent-soft: rgba(232, 255, 82, 0.36);
+      --danger: #b44313;
+      --success: #0f6d35;
+      --shadow: 0 22px 70px rgba(44, 31, 16, 0.09);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Space Grotesk", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.78), transparent 34%),
+        radial-gradient(circle at 80% 16%, rgba(232, 255, 82, 0.44), transparent 18%),
+        linear-gradient(180deg, #f7f1e8 0%, var(--bg) 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(to right, rgba(17, 17, 17, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(17, 17, 17, 0.03) 1px, transparent 1px);
+      background-size: 24px 24px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.18), transparent 72%);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    main {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 72px;
+    }
+
+    .topline {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.66);
+      backdrop-filter: blur(14px);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .pill::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--ink);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.8fr);
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .hero-card,
+    .section {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-card::after,
+    .section::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% 100% auto;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232, 255, 82, 0.34) 0%, transparent 72%);
+      transform: translateY(50%);
+      pointer-events: none;
+    }
+
+    .hero-copy {
+      padding: 28px 28px 32px;
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      font-family: "Instrument Serif", serif;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+    }
+
+    h1 {
+      max-width: 11ch;
+      font-size: clamp(3.35rem, 8vw, 7rem);
+      line-height: 0.92;
+    }
+
+    .hero-copy p:last-of-type {
+      max-width: 42rem;
+      margin: 22px 0 0;
+      font-size: clamp(1rem, 1.8vw, 1.18rem);
+      line-height: 1.58;
+      color: var(--muted);
+    }
+
+    .hero-meta {
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+      align-content: start;
+    }
+
+    .meta-block {
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.74);
+    }
+
+    .meta-block strong,
+    .meta-block .count {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .meta-block p {
+      margin: 0;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .count-value {
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 700;
+      line-height: 0.92;
+      letter-spacing: -0.06em;
+    }
+
+    form {
+      display: grid;
+      gap: 18px;
+    }
+
+    .section {
+      padding: 24px;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+      margin-bottom: 22px;
+    }
+
+    .section-index {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      background: var(--ink);
+      color: var(--paper-strong);
+      font-size: 14px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .section-head p {
+      margin: 10px 0 0;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field-label {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1.5px solid transparent;
+      border-radius: var(--radius-md);
+      padding: 15px 16px;
+      background: var(--paper-strong);
+      color: var(--ink);
+      font: inherit;
+      transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+      box-shadow: inset 0 0 0 1px rgba(17, 17, 17, 0.08);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #8b8174;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--ink);
+      box-shadow:
+        inset 0 0 0 1px rgba(17, 17, 17, 0.2),
+        0 0 0 5px rgba(232, 255, 82, 0.46);
+      transform: translateY(-1px);
+    }
+
+    textarea {
+      min-height: 134px;
+      resize: vertical;
+    }
+
+    .microcopy {
+      margin-top: -2px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+    }
+
+    .choice {
+      position: relative;
+    }
+
+    .choice input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .choice span {
+      display: flex;
+      align-items: end;
+      min-height: 84px;
+      padding: 16px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.64);
+      border: 1px solid var(--line);
+      line-height: 1.35;
+      cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease;
+    }
+
+    .choice span:hover {
+      transform: translateY(-2px);
+      border-color: var(--line-strong);
+    }
+
+    .choice input:checked + span {
+      background: var(--ink);
+      color: var(--paper-strong);
+      border-color: var(--ink);
+    }
+
+    .note {
+      padding: 16px 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(17, 17, 17, 0.12);
+      background: var(--accent-soft);
+      line-height: 1.55;
+    }
+
+    .final-stack {
+      display: grid;
+      gap: 16px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .submit-button {
+      appearance: none;
+      border: none;
+      border-radius: 999px;
+      padding: 17px 28px;
+      background: var(--ink);
+      color: var(--paper-strong);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+      box-shadow: 0 14px 34px rgba(17, 17, 17, 0.18);
+    }
+
+    .submit-button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 36px rgba(17, 17, 17, 0.22);
+    }
+
+    .submit-button:disabled {
+      cursor: progress;
+      opacity: 0.7;
+    }
+
+    .helper {
+      margin: 0;
+      max-width: 38rem;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .status {
+      min-height: 24px;
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .status[data-state="error"] {
+      color: var(--danger);
+    }
+
+    .status[data-state="success"] {
+      color: var(--success);
+    }
+
+    .status[data-state="info"] {
+      color: var(--muted);
+    }
+
+    .footer-line {
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .honeypot {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-card,
+      .section {
+        animation: rise 560ms ease both;
+      }
+    }
+
+    @media (max-width: 900px) {
+      main {
+        width: min(100% - 20px, 1160px);
+      }
+
+      .hero,
+      .grid.two {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy,
+      .section {
+        padding: 22px;
+      }
+
+      h1 {
+        max-width: 100%;
+      }
+
+      .actions {
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 560px) {
+      body {
+        background:
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.82), transparent 38%),
+          linear-gradient(180deg, #f7f1e8 0%, var(--bg) 100%);
+      }
+
+      .hero-copy,
+      .hero-meta,
+      .section {
+        border-radius: 28px;
+      }
+
+      .section-head {
+        grid-template-columns: 1fr;
+      }
+
+      .section-index {
+        width: 46px;
+        height: 46px;
+      }
+
+      .choice-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="topline">
+      <span class="pill">Project Intake</span>
+      <span class="pill">Optional Answers</span>
+      <span class="pill">Telegram Delivery</span>
+    </div>
+
+    <section class="hero">
+      <div class="hero-card hero-copy">
+        <p class="eyebrow">Опросник на разработку</p>
+        <h1>Какого бота или сайта вы хотите заказать?</h1>
+        <p>
+          Ниже подробный бриф, который помогает быстро собрать картину проекта: от идеи и задач до
+          дизайна, интеграций, сроков и бюджета. Все вопросы можно пропускать. Заполняйте только то,
+          что уже понятно на текущем этапе.
+        </p>
+      </div>
+
+      <aside class="hero-card hero-meta">
+        <div class="meta-block">
+          <span class="count">Заполнено</span>
+          <div id="progress-count" class="count-value">0 / 26</div>
+          <p>Счётчик помогает видеть, насколько подробно собран бриф.</p>
+        </div>
+
+        <div class="meta-block">
+          <strong>Что можно описать</strong>
+          <p>Цель проекта, аудиторию, сценарии, функции, визуальный стиль, сроки, бюджет и запуск.</p>
+        </div>
+
+        <div class="meta-block">
+          <strong>Как отправляется</strong>
+          <p>После отправки ответы уходят в Telegram-бота как структурированное сообщение.</p>
+        </div>
+      </aside>
+    </section>
+
+    <form id="brief-form" novalidate>
+      <input class="honeypot" type="text" name="company_website" tabindex="-1" autocomplete="off">
+
+      <section class="section">
+        <div class="section-head">
+          <div class="section-index">01</div>
+          <div>
+            <h2>Контакт и контекст</h2>
+            <p>Кто вы, как лучше связаться и в каком контексте появляется проект.</p>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <label class="field">
+            <span class="field-label">Имя</span>
+            <input type="text" name="name" placeholder="Как к вам обращаться">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Компания или роль</span>
+            <input type="text" name="role" placeholder="Например: владелец студии, маркетолог, основатель">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Telegram / телефон / email</span>
+            <input type="text" name="contact" placeholder="@username, +7..., email@example.com">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Город или часовой пояс</span>
+            <input type="text" name="location" placeholder="Например: Москва, GMT+3">
+          </label>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div class="section-index">02</div>
+          <div>
+            <h2>Что именно нужно сделать</h2>
+            <p>Опишите формат проекта и где вы сейчас находитесь: только идея, наброски или уже есть база.</p>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="field-label">Тип проекта</span>
+          <div class="choice-grid">
+            <label class="choice"><input type="radio" name="project_type" value="Telegram-бот"><span>Telegram-бот</span></label>
+            <label class="choice"><input type="radio" name="project_type" value="Лендинг"><span>Лендинг</span></label>
+            <label class="choice"><input type="radio" name="project_type" value="Корпоративный сайт"><span>Корпоративный сайт</span></label>
+            <label class="choice"><input type="radio" name="project_type" value="Интернет-магазин"><span>Интернет-магазин</span></label>
+            <label class="choice"><input type="radio" name="project_type" value="Веб-приложение / сервис"><span>Веб-приложение / сервис</span></label>
+            <label class="choice"><input type="radio" name="project_type" value="Другое"><span>Другое</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="field-label">Текущая стадия</span>
+          <div class="choice-grid">
+            <label class="choice"><input type="radio" name="project_stage" value="Пока только идея"><span>Пока только идея</span></label>
+            <label class="choice"><input type="radio" name="project_stage" value="Есть примерный бриф"><span>Есть примерный бриф</span></label>
+            <label class="choice"><input type="radio" name="project_stage" value="Есть прототип / схема"><span>Есть прототип / схема</span></label>
+            <label class="choice"><input type="radio" name="project_stage" value="Есть старый проект, нужно переделать"><span>Есть старый проект, нужно переделать</span></label>
+            <label class="choice"><input type="radio" name="project_stage" value="Нужен полный запуск с нуля"><span>Нужен полный запуск с нуля</span></label>
+          </div>
+        </div>
+
+        <label class="field">
+          <span class="field-label">Коротко о задаче</span>
+          <textarea name="project_summary" placeholder="Опишите в свободной форме, что хотите получить и зачем это бизнесу или проекту."></textarea>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Какую проблему нужно решить</span>
+          <textarea name="problem" placeholder="Что сейчас работает неудобно, теряет заявки, требует ручной работы или мешает росту?"></textarea>
+        </label>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div class="section-index">03</div>
+          <div>
+            <h2>Аудитория и сценарии</h2>
+            <p>Кто будет пользоваться продуктом, какие действия должен совершать и в какой среде.</p>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <label class="field">
+            <span class="field-label">Кто ваш клиент или пользователь</span>
+            <textarea name="audience" placeholder="Например: B2B-компании, студенты, покупатели, сотрудники отдела продаж"></textarea>
+          </label>
+
+          <label class="field">
+            <span class="field-label">Основной сценарий</span>
+            <textarea name="user_flow" placeholder="Что человек должен сделать: оставить заявку, купить, забронировать, получить подборку, пройти регистрацию и т.д."></textarea>
+          </label>
+        </div>
+
+        <div class="grid two">
+          <label class="field">
+            <span class="field-label">География и языки</span>
+            <input type="text" name="geography" placeholder="Россия / СНГ / весь мир, русский / английский и т.д.">
+          </label>
+
+          <div class="field">
+            <span class="field-label">Где должен жить продукт</span>
+            <div class="choice-grid">
+              <label class="choice"><input type="checkbox" name="platforms" value="Telegram"><span>Telegram</span></label>
+              <label class="choice"><input type="checkbox" name="platforms" value="Web"><span>Web</span></label>
+              <label class="choice"><input type="checkbox" name="platforms" value="Мобильная версия"><span>Мобильная версия</span></label>
+              <label class="choice"><input type="checkbox" name="platforms" value="Личный кабинет"><span>Личный кабинет</span></label>
+              <label class="choice"><input type="checkbox" name="platforms" value="Внутренний инструмент"><span>Внутренний инструмент</span></label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div class="section-index">04</div>
+          <div>
+            <h2>Функции и интеграции</h2>
+            <p>Здесь можно перечислить обязательные возможности, автоматизации и системы, с которыми нужно связаться.</p>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="field-label">Какие функции нужны</span>
+          <div class="choice-grid">
+            <label class="choice"><input type="checkbox" name="features" value="Сбор заявок"><span>Сбор заявок</span></label>
+            <label class="choice"><input type="checkbox" name="features" value="Каталог / витрина"><span>Каталог / витрина</span></label>
+            <label class="choice"><input type="checkbox" name="features" value="Оплата"><span>Оплата</span></label>
+            <label class="choice"><input type="checkbox" name="features" value="Онлайн-запись"><span>Онлайн-запись</span></label>
+            <label class="choice"><input type="checkbox" name="features" value="Личный кабинет"><span>Личный кабинет</span></label>
+            <label class="choice"><input type="checkbox" name="features" value="Админка"><span>Админка</span></label>
+            <label class="choice"><input type="checkbox" name="features" value="CRM-интеграция"><span>CRM-интеграция</span></label>
+            <label class="choice"><input type="checkbox" name="features" value="Аналитика"><span>Аналитика</span></label>
+            <label class="choice"><input type="checkbox" name="features" value="AI / нейросети"><span>AI / нейросети</span></label>
+            <label class="choice"><input type="checkbox" name="features" value="Рассылки / уведомления"><span>Рассылки / уведомления</span></label>
+            <label class="choice"><input type="checkbox" name="features" value="Парсинг / импорт"><span>Парсинг / импорт</span></label>
+            <label class="choice"><input type="checkbox" name="features" value="Мультиязычность"><span>Мультиязычность</span></label>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <label class="field">
+            <span class="field-label">С какими сервисами нужно интегрироваться</span>
+            <textarea name="integrations" placeholder="Например: amoCRM, Bitrix24, Notion, Google Sheets, Yookassa, Tilda, Telegram, OpenAI API"></textarea>
+          </label>
+
+          <label class="field">
+            <span class="field-label">Есть ли нестандартная логика</span>
+            <textarea name="logic" placeholder="Например: личные роли, цепочки после оплаты, сложные фильтры, подбор на основе ответов"></textarea>
+          </label>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div class="section-index">05</div>
+          <div>
+            <h2>Контент и визуальный стиль</h2>
+            <p>Что уже есть по бренду и какой эстетики вы ждёте от проекта.</p>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <label class="field">
+            <span class="field-label">Что по стилю важно</span>
+            <textarea name="style" placeholder="Например: минимализм, технологичность, премиальность, editorial, яркая типографика, строгий B2B"></textarea>
+          </label>
+
+          <label class="field">
+            <span class="field-label">Референсы</span>
+            <textarea name="references" placeholder="Ссылки на сайты, боты или проекты, которые вам нравятся. Можно просто перечислить названия."></textarea>
+          </label>
+        </div>
+
+        <div class="field">
+          <span class="field-label">Что уже готово по контенту</span>
+          <div class="choice-grid">
+            <label class="choice"><input type="checkbox" name="content_status" value="Есть тексты"><span>Есть тексты</span></label>
+            <label class="choice"><input type="checkbox" name="content_status" value="Есть фото / видео"><span>Есть фото / видео</span></label>
+            <label class="choice"><input type="checkbox" name="content_status" value="Есть фирменный стиль"><span>Есть фирменный стиль</span></label>
+            <label class="choice"><input type="checkbox" name="content_status" value="Есть логотип"><span>Есть логотип</span></label>
+            <label class="choice"><input type="checkbox" name="content_status" value="Ничего нет, нужно помочь"><span>Ничего нет, нужно помочь</span></label>
+          </div>
+        </div>
+
+        <label class="field">
+          <span class="field-label">Структура или разделы</span>
+          <textarea name="structure" placeholder="Если уже понимаете, перечислите страницы, разделы, шаги бота или основные блоки."></textarea>
+        </label>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div class="section-index">06</div>
+          <div>
+            <h2>Сроки, бюджет и запуск</h2>
+            <p>Организационные вводные, которые влияют на объём работ и приоритеты.</p>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <label class="field">
+            <span class="field-label">Желаемый срок</span>
+            <input type="text" name="timeline" placeholder="Например: в течение 2 недель, к 15 мая, без жёсткого дедлайна">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Ориентир по бюджету</span>
+            <input type="text" name="budget" placeholder="Например: до 100 000 ₽, обсуждаемо, нужен расчёт">
+          </label>
+        </div>
+
+        <div class="field">
+          <span class="field-label">Что критично в первую очередь</span>
+          <div class="choice-grid">
+            <label class="choice"><input type="radio" name="priority" value="Скорость запуска"><span>Скорость запуска</span></label>
+            <label class="choice"><input type="radio" name="priority" value="Качество дизайна"><span>Качество дизайна</span></label>
+            <label class="choice"><input type="radio" name="priority" value="Сложная логика"><span>Сложная логика</span></label>
+            <label class="choice"><input type="radio" name="priority" value="Надёжность и масштаб"><span>Надёжность и масштаб</span></label>
+            <label class="choice"><input type="radio" name="priority" value="Минимальный бюджет"><span>Минимальный бюджет</span></label>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <label class="field">
+            <span class="field-label">Что уже есть технически</span>
+            <textarea name="assets" placeholder="Домен, хостинг, существующий сайт, CRM, база клиентов, база товаров, API-доступы и т.д."></textarea>
+          </label>
+
+          <div class="field">
+            <span class="field-label">Что нужно после запуска</span>
+            <div class="choice-grid">
+              <label class="choice"><input type="checkbox" name="support_mode" value="Поддержка"><span>Поддержка</span></label>
+              <label class="choice"><input type="checkbox" name="support_mode" value="Обучение команды"><span>Обучение команды</span></label>
+              <label class="choice"><input type="checkbox" name="support_mode" value="Доработки по этапам"><span>Доработки по этапам</span></label>
+              <label class="choice"><input type="checkbox" name="support_mode" value="Разовая сдача"><span>Разовая сдача</span></label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div class="section-index">07</div>
+          <div>
+            <h2>Дополнительно</h2>
+            <p>Любые детали, пожелания или ограничения, которые не попали в предыдущие блоки.</p>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <label class="field">
+            <span class="field-label">Что ещё важно учесть</span>
+            <textarea name="extra" placeholder="Можно описать риски, ограничения, юридические нюансы, пожелания по коммуникации или иные вводные."></textarea>
+          </label>
+
+          <label class="field">
+            <span class="field-label">Откуда вы пришли</span>
+            <textarea name="source" placeholder="Рекомендация, Telegram, поиск, Instagram, сайт, знакомые и т.д."></textarea>
+          </label>
+        </div>
+
+        <div class="final-stack">
+          <div class="note">
+            Чтобы страница могла сама определить, в какой чат доставить ответы, сначала откройте бота
+            <a href="https://t.me/opross2k_bot" target="_blank" rel="noreferrer">@opross2k_bot</a> и
+            отправьте ему <strong>/start</strong>. Если у бота нет ни одного личного диалога, Bot API не
+            сможет угадать нужный <code>chat_id</code>.
+          </div>
+
+          <div class="actions">
+            <button id="submit-button" class="submit-button" type="submit">Отправить бриф в Telegram</button>
+            <p class="helper">
+              Все поля необязательные, но форма не отправится совсем пустой. Если нужен жёстко заданный
+              получатель, пропишите <code>chatId</code> в блоке <code>CONFIG</code> внутри файла.
+            </p>
+          </div>
+
+          <p id="status" class="status" data-state="info" aria-live="polite"></p>
+        </div>
+      </section>
+    </form>
+
+    <p class="footer-line">
+      Один HTML-файл: структура, стили, анимация и отправка в Telegram уже внутри.
+    </p>
+  </main>
+
+  <script>
+    const CONFIG = {
+      botToken: "8239657848:AAGbTtPGmGTn6oz_ThVf41zTjJh6n9NXbpQ",
+      chatId: "761511811"
+    };
+
+    const form = document.getElementById("brief-form");
+    const statusNode = document.getElementById("status");
+    const submitButton = document.getElementById("submit-button");
+    const progressNode = document.getElementById("progress-count");
+
+    const groupedFields = [
+      {
+        label: "Имя",
+        getValue: () => getTrimmedValue("name")
+      },
+      {
+        label: "Компания или роль",
+        getValue: () => getTrimmedValue("role")
+      },
+      {
+        label: "Контакт",
+        getValue: () => getTrimmedValue("contact")
+      },
+      {
+        label: "Город или часовой пояс",
+        getValue: () => getTrimmedValue("location")
+      },
+      {
+        label: "Тип проекта",
+        getValue: () => getSingleChoiceValue("project_type")
+      },
+      {
+        label: "Текущая стадия",
+        getValue: () => getSingleChoiceValue("project_stage")
+      },
+      {
+        label: "Коротко о задаче",
+        getValue: () => getTrimmedValue("project_summary")
+      },
+      {
+        label: "Какую проблему нужно решить",
+        getValue: () => getTrimmedValue("problem")
+      },
+      {
+        label: "Кто ваш клиент или пользователь",
+        getValue: () => getTrimmedValue("audience")
+      },
+      {
+        label: "Основной сценарий",
+        getValue: () => getTrimmedValue("user_flow")
+      },
+      {
+        label: "География и языки",
+        getValue: () => getTrimmedValue("geography")
+      },
+      {
+        label: "Где должен жить продукт",
+        getValue: () => getMultiChoiceValue("platforms")
+      },
+      {
+        label: "Какие функции нужны",
+        getValue: () => getMultiChoiceValue("features")
+      },
+      {
+        label: "Интеграции",
+        getValue: () => getTrimmedValue("integrations")
+      },
+      {
+        label: "Нестандартная логика",
+        getValue: () => getTrimmedValue("logic")
+      },
+      {
+        label: "Что по стилю важно",
+        getValue: () => getTrimmedValue("style")
+      },
+      {
+        label: "Референсы",
+        getValue: () => getTrimmedValue("references")
+      },
+      {
+        label: "Что готово по контенту",
+        getValue: () => getMultiChoiceValue("content_status")
+      },
+      {
+        label: "Структура или разделы",
+        getValue: () => getTrimmedValue("structure")
+      },
+      {
+        label: "Желаемый срок",
+        getValue: () => getTrimmedValue("timeline")
+      },
+      {
+        label: "Ориентир по бюджету",
+        getValue: () => getTrimmedValue("budget")
+      },
+      {
+        label: "Что критично в первую очередь",
+        getValue: () => getSingleChoiceValue("priority")
+      },
+      {
+        label: "Что уже есть технически",
+        getValue: () => getTrimmedValue("assets")
+      },
+      {
+        label: "Что нужно после запуска",
+        getValue: () => getMultiChoiceValue("support_mode")
+      },
+      {
+        label: "Что ещё важно учесть",
+        getValue: () => getTrimmedValue("extra")
+      },
+      {
+        label: "Откуда вы пришли",
+        getValue: () => getTrimmedValue("source")
+      }
+    ];
+
+    const totalGroups = groupedFields.length;
+
+    function apiUrl(method) {
+      return "https://api.telegram.org/bot" + CONFIG.botToken + "/" + method;
+    }
+
+    function getTrimmedValue(name) {
+      const field = form.elements.namedItem(name);
+      return field ? String(field.value || "").trim() : "";
+    }
+
+    function getSingleChoiceValue(name) {
+      const checked = form.querySelector('input[name="' + name + '"]:checked');
+      return checked ? checked.value.trim() : "";
+    }
+
+    function getMultiChoiceValue(name) {
+      const values = Array.from(form.querySelectorAll('input[name="' + name + '"]:checked'))
+        .map((input) => input.value.trim())
+        .filter(Boolean);
+
+      return values.join(", ");
+    }
+
+    function setStatus(message, state) {
+      statusNode.textContent = message;
+      statusNode.dataset.state = state;
+    }
+
+    function collectAnswers() {
+      const honeypot = getTrimmedValue("company_website");
+
+      if (honeypot) {
+        throw new Error("Похоже на автоматическую отправку. Проверьте форму и попробуйте снова.");
+      }
+
+      return groupedFields
+        .map((field) => ({ label: field.label, value: field.getValue() }))
+        .filter((field) => field.value);
+    }
+
+    function buildMessageChunks(answers) {
+      const dateStamp = new Intl.DateTimeFormat("ru-RU", {
+        dateStyle: "long",
+        timeStyle: "short"
+      }).format(new Date());
+
+      const lines = [
+        "Новая заявка с HTML-опросника",
+        "Дата: " + dateStamp,
+        ""
+      ];
+
+      answers.forEach((field) => {
+        lines.push(field.label + ":");
+        lines.push(field.value);
+        lines.push("");
+      });
+
+      lines.push("Источник: одностраничный бриф");
+
+      const chunks = [];
+      let currentChunk = "";
+
+      for (const line of lines) {
+        const candidate = currentChunk ? currentChunk + "\n" + line : line;
+
+        if (candidate.length > 3500) {
+          if (currentChunk) {
+            chunks.push(currentChunk);
+          }
+
+          currentChunk = line;
+        } else {
+          currentChunk = candidate;
+        }
+      }
+
+      if (currentChunk) {
+        chunks.push(currentChunk);
+      }
+
+      return chunks;
+    }
+
+    async function resolveChatId() {
+      if (CONFIG.chatId.trim()) {
+        return CONFIG.chatId.trim();
+      }
+
+      const response = await fetch(apiUrl("getUpdates"));
+      const data = await response.json();
+
+      if (!data.ok) {
+        throw new Error("Bot API не вернул updates. Проверьте токен и попробуйте снова.");
+      }
+
+      const updates = Array.isArray(data.result) ? [...data.result].reverse() : [];
+
+      for (const update of updates) {
+        const candidates = [
+          update.message && update.message.chat,
+          update.edited_message && update.edited_message.chat,
+          update.channel_post && update.channel_post.chat,
+          update.edited_channel_post && update.edited_channel_post.chat,
+          update.callback_query && update.callback_query.message && update.callback_query.message.chat,
+          update.my_chat_member && update.my_chat_member.chat
+        ].filter(Boolean);
+
+        const privateChat = candidates.find((chat) => chat.type === "private");
+        const targetChat = privateChat || candidates[0];
+
+        if (targetChat && targetChat.id) {
+          return String(targetChat.id);
+        }
+      }
+
+      throw new Error(
+        "Не удалось определить chat_id. Сначала напишите боту /start или вручную укажите CONFIG.chatId в файле."
+      );
+    }
+
+    async function sendChunk(chatId, text) {
+      const response = await fetch(apiUrl("sendMessage"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: text,
+          disable_web_page_preview: true
+        })
+      });
+
+      const data = await response.json();
+
+      if (!data.ok) {
+        throw new Error(data.description || "Telegram не принял сообщение.");
+      }
+
+      return data;
+    }
+
+    function updateProgress() {
+      const filledGroups = groupedFields.reduce((count, field) => {
+        return count + (field.getValue() ? 1 : 0);
+      }, 0);
+
+      progressNode.textContent = filledGroups + " / " + totalGroups;
+    }
+
+    form.addEventListener("input", updateProgress);
+    form.addEventListener("change", updateProgress);
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const answers = collectAnswers();
+
+      if (!answers.length) {
+        setStatus("Заполните хотя бы одно поле, иначе в Telegram уйдёт пустая заявка.", "error");
+        return;
+      }
+
+      submitButton.disabled = true;
+      setStatus("Отправляю ответы в Telegram...", "info");
+
+      try {
+        const chatId = await resolveChatId();
+        const messageChunks = buildMessageChunks(answers);
+
+        for (const chunk of messageChunks) {
+          await sendChunk(chatId, chunk);
+        }
+
+        setStatus("Бриф отправлен в Telegram.", "success");
+        form.reset();
+        updateProgress();
+      } catch (error) {
+        setStatus(error.message || "Не получилось отправить бриф. Проверьте настройки Telegram.", "error");
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+
+    updateProgress();
+  </script>
+</body>
+</html>
